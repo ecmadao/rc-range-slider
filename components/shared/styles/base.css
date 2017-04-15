@@ -1,0 +1,15 @@
+:root {
+  /* ===== border ===== */
+  --radius-small: 2px;
+
+  --gray-light: #dee2e6;
+  --gray-dark: #495057;
+  --gray: #adb5bd;
+  --blue: #329af0;
+  --green: #51cf66;
+  --red: #ff6b6b;
+  --white: #FFFFFF;
+
+  --zIndex1: 1;
+  --zIndex9: 9;
+}
