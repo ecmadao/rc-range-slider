@@ -143,7 +143,7 @@ class Slider extends React.Component {
     const { positions } = this.state;
     const { color } = this.props;
     const left = positions.length > 1 ? positions[0].left : 0;
-    const right = positions.slice(-1)[0].left;
+    const right = 1 - positions.slice(-1)[0].left;
     return (
       <ProgressBar
         color={color}

@@ -53,7 +53,7 @@
   left: 0;
   cursor: pointer;
   z-index: var(--zIndex9);
-  position: absolute;
+  position: absolute !important;
   transform: translateX(-50%);
   top: calc((var(--pathwayHeight) - var(--draggerSize) - 2 * var(--draggerBorder)) / 2);
 }
