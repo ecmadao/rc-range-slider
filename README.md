@@ -1,4 +1,4 @@
-# React Tipso
+# React Range Slider
 
 [![npm version](https://badge.fury.io/js/rc-range-slider.svg)](https://badge.fury.io/js/rc-range-slider)  [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com) [![rc-range-slider](http://img.shields.io/npm/dm/rc-range-slider.svg)](https://www.npmjs.com/package/rc-range-slider) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/ecmadao/rc-range-slider/master/LICENSE)
 
