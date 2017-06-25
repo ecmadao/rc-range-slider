@@ -103,14 +103,23 @@ class Dragger extends React.Component {
   }
 
   render() {
-    const { color, left, value, tipFormatter } = this.props;
+    const {
+      color,
+      left,
+      value,
+      tipFormatter,
+      useTipso,
+      draggerClass
+    } = this.props;
     const dragClass = cx(
       styles.dragger,
-      color && styles[color]
+      color && styles[color],
+      draggerClass
     );
     return (
       <Tipso
         theme="dark"
+        disabled={!useTipso}
         show={this.state.draging}
         tipsoContent={(
           <div style={{
@@ -141,6 +150,8 @@ Dragger.propTypes = {
   max: PropTypes.number,
   onDragEnd: PropTypes.func,
   onDraging: PropTypes.func,
+  useTipso: PropTypes.bool,
+  draggerClass: PropTypes.string,
 };
 
 Dragger.defaultProps = {
@@ -153,6 +164,8 @@ Dragger.defaultProps = {
   color: 'green',
   onDragEnd: () => {},
   onDraging: () => {},
+  useTipso: true,
+  draggerClass: ''
 };
 
 export default Dragger;

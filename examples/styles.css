@@ -1,0 +1,6 @@
+.dragger {
+  width: 20px;
+  height: 20px;
+  border: none !important;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.25);
+}

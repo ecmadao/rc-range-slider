@@ -110,7 +110,15 @@ class Slider extends React.Component {
 
   renderDrager() {
     const { positions, maxDis } = this.state;
-    const { color, tipFormatter, minRange, max, min } = this.props;
+    const {
+      max,
+      min,
+      color,
+      useTipso,
+      minRange,
+      draggerClass,
+      tipFormatter,
+    } = this.props;
     const minDis = minRange / (max - min);
     return positions.map((item, index) => {
       const { left, originLeft } = item;
@@ -125,12 +133,14 @@ class Slider extends React.Component {
         <Dragger
           key={index}
           left={left}
+          useTipso={useTipso}
           originLeft={originLeft}
           maxDis={maxDis}
           color={color}
           value={value}
           max={maxPosition}
           min={minPosition}
+          draggerClass={draggerClass}
           onDragEnd={this.onChange(index)}
           onDraging={this.onDraging(index)}
           tipFormatter={tipFormatter}
@@ -183,7 +193,9 @@ Slider.propTypes = {
   ]),
   minRange: PropTypes.number,
   color: PropTypes.string,
-  onChange: PropTypes.func
+  draggerClass: PropTypes.string,
+  onChange: PropTypes.func,
+  useTipso: PropTypes.bool,
 };
 
 Slider.defaultProps = {
@@ -194,7 +206,9 @@ Slider.defaultProps = {
   value: 10,
   minRange: 1,
   color: 'green',
-  onChange: () => {}
+  onChange: () => {},
+  useTipso: true,
+  draggerClass: '',
 };
 
 export default Slider;

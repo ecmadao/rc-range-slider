@@ -42,6 +42,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
+        include: WRAPPER_PATH,
+        loader: cssLoader.join('!'),
+      },
+      {
+        test: /\.css$/,
         include: /rc-tipso/,
         loader: cssLoader.join('!'),
       },
