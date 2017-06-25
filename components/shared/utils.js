@@ -39,10 +39,32 @@ const getStandardAbsolutePosition = (position, minPosition, maxPosition) => {
   return position;
 };
 
+const createArray = (length) => new Array(length).join('0').split('');
+
+const findFirstIndex = (options = {}) => {
+  const {
+    array = [],
+    check = item => item,
+    getVal = item => item
+  } = options;
+  let index = -1;
+  for (let i = 0; i < array.length; i += 1) {
+    const item = array[i];
+    const val = getVal(item);
+    if (check(val)) {
+      index = i;
+      break;
+    }
+  }
+  return index;
+};
+
 export default {
   isArray,
   isEqual,
+  createArray,
   mousePosition,
+  findFirstIndex,
   disableMouseDown,
   validatePosition: getStandardAbsolutePosition
 };

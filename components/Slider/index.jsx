@@ -10,12 +10,17 @@ import Utils from '../shared/utils';
 class Slider extends React.Component {
   constructor(props) {
     super(props);
-    this.state = objectAssign({}, this.initialState(props), {
-      maxDis: 0
-    });
+    this.state = objectAssign(
+      {},
+      this.initialState(props),
+      {
+        maxDis: 0
+      }
+    );
     this.onChange = this.onChange.bind(this);
     this.onDraging = this.onDraging.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
+    this.onDragMove = this.onDragMove.bind(this);
     this.changePosition = this.changePosition.bind(this);
   }
 
@@ -80,7 +85,8 @@ class Slider extends React.Component {
         value,
         ...positions.slice(index + 1).map(returnValue)
       ];
-      onChange(results.length > 1 ? results : results[0]);
+      const result = results.length > 1 ? results : results[0];
+      onChange(result);
     };
   }
 
@@ -94,10 +100,25 @@ class Slider extends React.Component {
   }
 
   onDragEnd(left, index) {
-    this.changePosition(index, { originLeft: left });
+    this.changePosition(index, { left, originLeft: left });
+  }
+
+  onDragMove(leftPos) {
+    return () => {
+      const { positions } = this.state;
+      const leftOffsets = positions.map(position => Math.abs(position.left - leftPos));
+      const minLeftOffset = Math.min(...leftOffsets).toFixed(2);
+      const index = Utils.findFirstIndex({
+        array: positions,
+        getVal: (position) => position.left,
+        check: val => Math.abs(val - leftPos).toFixed(2) === minLeftOffset
+      });
+      this.onChange(index)(leftPos);
+    };
   }
 
   changePosition(index, position) {
+    if (index <= -1) return;
     const { positions } = this.state;
     this.setState({
       positions: [
@@ -113,9 +134,11 @@ class Slider extends React.Component {
     const {
       max,
       min,
+      jump,
       color,
       useTipso,
       minRange,
+      minJump,
       draggerClass,
       tipsoClass,
       tipFormatter,
@@ -132,6 +155,7 @@ class Slider extends React.Component {
         : 1;
       return (
         <Dragger
+          jump={jump}
           key={index}
           left={left}
           useTipso={useTipso}
@@ -141,6 +165,9 @@ class Slider extends React.Component {
           value={value}
           max={maxPosition}
           min={minPosition}
+          maxValue={max}
+          minValue={min}
+          minJump={minJump}
           draggerClass={draggerClass}
           tipsoClass={tipsoClass}
           onDragEnd={this.onChange(index)}
@@ -165,6 +192,33 @@ class Slider extends React.Component {
     );
   }
 
+  renderSections() {
+    const { clickable, max, min, minJump, jump } = this.props;
+    if (!clickable || !jump || minJump <= 0) return null;
+    const { positions } = this.state;
+    const lefts = positions.map(position => position.left);
+    let maxLeft = Math.min(...lefts);
+    const maxRight = Math.max(...lefts);
+    if (positions.length === 1) {
+      maxLeft = 0;
+    }
+    const length = (max - min) / minJump;
+    return Utils.createArray(length + 2).map((val, index) => {
+      const left = index / length;
+      return (
+        <div
+          key={index}
+          style={{ left: `${left * 100}%` }}
+          className={cx(
+            styles.dragSection,
+            left >= maxLeft && left <= maxRight && styles.light
+          )}
+          onClick={this.onDragMove(left)}
+        />
+      );
+    });
+  }
+
   render() {
     const { className } = this.props;
     const containerClass = cx(
@@ -176,6 +230,7 @@ class Slider extends React.Component {
         <div
           className={styles.pathway}
           ref={ref => this.pathway = ref}>
+          {this.renderSections()}
           {this.renderDrager()}
           {this.renderProgressBar()}
         </div>
@@ -199,6 +254,9 @@ Slider.propTypes = {
   tipsoClass: PropTypes.string,
   onChange: PropTypes.func,
   useTipso: PropTypes.bool,
+  jump: PropTypes.bool,
+  minJump: PropTypes.number,
+  clickable: PropTypes.bool,
 };
 
 Slider.defaultProps = {
@@ -213,6 +271,9 @@ Slider.defaultProps = {
   useTipso: true,
   draggerClass: '',
   tipsoClass: '',
+  jump: false,
+  minJump: 1,
+  clickable: false,
 };
 
 export default Slider;

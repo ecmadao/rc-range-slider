@@ -91,10 +91,32 @@ class Dragger extends React.Component {
 
   setLeft(position, mouseUp = false) {
     const dragX = position.x;
-    const { maxDis, onDragEnd, onDraging, min, max } = this.props;
+    const {
+      min,
+      max,
+      jump,
+      maxValue,
+      minValue,
+      minJump,
+      maxDis,
+      onDragEnd,
+      onDraging,
+    } = this.props;
     if (this.startX !== dragX) {
       const percentage = (dragX - this.startX) / maxDis;
-      const validateLeft = darg.validatePosition(this.props.originLeft + percentage, min, max);
+      let validateLeft = darg.validatePosition(
+        this.props.originLeft + percentage, min, max);
+
+      if (jump) {
+        let val = validateLeft * (maxValue - minValue);
+        const integerVal = Math.floor(val);
+        if ((val - integerVal) > minJump / 2) {
+          val = integerVal + 1;
+        } else {
+          val = integerVal;
+        }
+        validateLeft = val / (maxValue - minValue);
+      }
       onDraging && onDraging(validateLeft);
       if (mouseUp) {
         onDragEnd && onDragEnd(validateLeft);
