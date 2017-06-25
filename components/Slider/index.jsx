@@ -73,21 +73,18 @@ class Slider extends React.Component {
     this.setState({ maxDis });
   }
 
-  onChange(index) {
+  onChange(index, left) {
     const { positions } = this.state;
     const { onChange } = this.props;
-    return (left) => {
-      this.onDragEnd(left, index);
-      const value = this.getValue(left);
-      const returnValue = position => this.getValue(position.left);
-      const results = [
-        ...positions.slice(0, index).map(returnValue),
-        value,
-        ...positions.slice(index + 1).map(returnValue)
-      ];
-      const result = results.length > 1 ? results : results[0];
-      onChange(result);
-    };
+    const value = this.getValue(left);
+    const returnValue = position => this.getValue(position.left);
+    const results = [
+      ...positions.slice(0, index).map(returnValue),
+      value,
+      ...positions.slice(index + 1).map(returnValue)
+    ];
+    const result = results.length > 1 ? results : results[0];
+    onChange(result);
   }
 
   getValue(left) {
@@ -96,11 +93,20 @@ class Slider extends React.Component {
   }
 
   onDraging(index) {
-    return left => this.changePosition(index, { left });
+    const { updateWhenDrag } = this.props;
+    return left => {
+      this.changePosition(index, { left });
+      if (updateWhenDrag) {
+        this.onChange(index, left);
+      }
+    };
   }
 
-  onDragEnd(left, index) {
-    this.changePosition(index, { left, originLeft: left });
+  onDragEnd(index) {
+    return left => {
+      this.changePosition(index, { left, originLeft: left });
+      this.onChange(index, left);
+    };
   }
 
   onDragMove(leftPos) {
@@ -113,7 +119,7 @@ class Slider extends React.Component {
         getVal: (position) => position.left,
         check: val => Math.abs(val - leftPos).toFixed(2) === minLeftOffset
       });
-      this.onChange(index)(leftPos);
+      this.onDragEnd(index)(leftPos);
     };
   }
 
@@ -170,7 +176,7 @@ class Slider extends React.Component {
           minJump={minJump}
           draggerClass={draggerClass}
           tipsoClass={tipsoClass}
-          onDragEnd={this.onChange(index)}
+          onDragEnd={this.onDragEnd(index)}
           onDraging={this.onDraging(index)}
           tipFormatter={tipFormatter}
         />
@@ -257,6 +263,7 @@ Slider.propTypes = {
   jump: PropTypes.bool,
   minJump: PropTypes.number,
   clickable: PropTypes.bool,
+  updateWhenDrag: PropTypes.bool,
 };
 
 Slider.defaultProps = {
@@ -274,6 +281,7 @@ Slider.defaultProps = {
   jump: false,
   minJump: 1,
   clickable: false,
+  updateWhenDrag: false,
 };
 
 export default Slider;

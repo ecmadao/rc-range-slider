@@ -11,6 +11,10 @@ class SliderWrapper extends React.Component {
         <div>
           <Slider value={15} />
         </div>
+        <h4>Update when dragging</h4>
+        <div>
+          <Slider value={15} updateWhenDrag />
+        </div>
         <h4>Custom (Without tip, curstom dragger style)</h4>
         <div>
           <Slider
