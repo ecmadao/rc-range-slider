@@ -1,6 +1,6 @@
 {
   "name": "rc-range-slider",
-  "version": "0.0.5",
+  "version": "0.0.5-beta.1",
   "description": "A range slider for react",
   "main": "./lib/index.js",
   "scripts": {
