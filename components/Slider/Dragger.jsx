@@ -109,24 +109,32 @@ class Dragger extends React.Component {
       value,
       tipFormatter,
       useTipso,
-      draggerClass
+      draggerClass,
+      tipsoClass
     } = this.props;
     const dragClass = cx(
       styles.dragger,
       color && styles[color],
       draggerClass
     );
+    const tipsoValue = tipFormatter ? tipFormatter(value) : value;
     return (
       <Tipso
         theme="dark"
         disabled={!useTipso}
         show={this.state.draging}
         tipsoContent={(
-          <div style={{
-            textAlign: 'center'
-          }}>{tipFormatter ? tipFormatter(value) : value}</div>
+          <div
+            style={{
+              textAlign: 'center',
+              minWidth: `${(tipsoValue.length + 1) * 5}px`
+            }}
+          >{tipsoValue}</div>
         )}
-        className={styles.tipso}
+        className={cx(
+          styles.tipso,
+          tipsoClass
+        )}
         wrapperClass={styles['dragger-container']}
         wrapperStyle={{
           left: `${left * 100}%`
@@ -152,6 +160,7 @@ Dragger.propTypes = {
   onDraging: PropTypes.func,
   useTipso: PropTypes.bool,
   draggerClass: PropTypes.string,
+  tipsoClass: PropTypes.string,
 };
 
 Dragger.defaultProps = {
@@ -165,7 +174,8 @@ Dragger.defaultProps = {
   onDragEnd: () => {},
   onDraging: () => {},
   useTipso: true,
-  draggerClass: ''
+  draggerClass: '',
+  tipsoClass: '',
 };
 
 export default Dragger;

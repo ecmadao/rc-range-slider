@@ -21,6 +21,17 @@ class SliderWrapper extends React.Component {
             draggerClass={styles.dragger}
           />
         </div>
+        <h4>Custom Tipso</h4>
+        <div>
+          <Slider
+            value={24}
+            max={24}
+            min={1}
+            draggerClass={styles.dragger}
+            tipsoClass={styles.tipsoClass}
+            tipFormatter={() => 'This is a long tipso'}
+          />
+        </div>
         <h4>Range Slider</h4>
         <div>
           <Slider value={[15, 35]} />

@@ -117,6 +117,7 @@ class Slider extends React.Component {
       useTipso,
       minRange,
       draggerClass,
+      tipsoClass,
       tipFormatter,
     } = this.props;
     const minDis = minRange / (max - min);
@@ -141,6 +142,7 @@ class Slider extends React.Component {
           max={maxPosition}
           min={minPosition}
           draggerClass={draggerClass}
+          tipsoClass={tipsoClass}
           onDragEnd={this.onChange(index)}
           onDraging={this.onDraging(index)}
           tipFormatter={tipFormatter}
@@ -194,6 +196,7 @@ Slider.propTypes = {
   minRange: PropTypes.number,
   color: PropTypes.string,
   draggerClass: PropTypes.string,
+  tipsoClass: PropTypes.string,
   onChange: PropTypes.func,
   useTipso: PropTypes.bool,
 };
@@ -209,6 +212,7 @@ Slider.defaultProps = {
   onChange: () => {},
   useTipso: true,
   draggerClass: '',
+  tipsoClass: '',
 };
 
 export default Slider;
