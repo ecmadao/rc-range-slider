@@ -82,6 +82,18 @@ class SliderWrapper extends React.Component {
             minJump={2}
           />
         </div>
+        <h4>Multi drag with section</h4>
+        <div>
+          <Slider
+            jump
+            min={0}
+            max={20}
+            clickable
+            value={[2, 6, 10, 15]}
+            minRange={1}
+            minJump={2}
+          />
+        </div>
       </div>
     );
   }

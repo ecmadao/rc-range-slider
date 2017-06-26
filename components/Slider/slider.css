@@ -10,12 +10,12 @@
 .container {
   flex: 1;
   min-width: 200px;
+  margin: var(--pathwayMargin) 0;
 }
 
 .pathway {
   width: 100%;
   height: var(--pathwayHeight);
-  margin: var(--pathwayMargin) 0;
   position: relative;
   border-radius: var(--radius-small);
   background-color: var(--gray-light);

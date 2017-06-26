@@ -3,7 +3,7 @@ import { storiesOf } from '@kadira/storybook';
 
 import SliderWrapper from '../examples/SliderWrapper';
 
-storiesOf('Others', module)
+storiesOf('Slider', module)
   .add('basical', () => (
     <SliderWrapper />
   ));
