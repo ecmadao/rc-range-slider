@@ -3,9 +3,31 @@ import Slider from '../components/index';
 import styles from './styles.css';
 
 class SliderWrapper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      val: 0
+    };
+    this.onChange = this.onChange.bind(this);
+  }
+
+  onChange(val) {
+    this.setState({ val });
+  }
+
   render() {
     return (
       <div id="components-container">
+        <h3>Change State by outside</h3>
+        <div>
+          <Slider
+            jump
+            minJump={4}
+            updateWhenDrag
+            value={this.state.val}
+            onChange={this.onChange}
+          />
+        </div>
         <h3>Slider</h3>
         <h4>Base Slider</h4>
         <div>
