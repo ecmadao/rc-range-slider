@@ -72,16 +72,28 @@ Click [here](./examples/SliderWrapper.jsx) to see tipso usage examples.
 
 ## Api
 
-| name         | type            | default    | description                              |
-| ------------ | --------------- | ---------- | ---------------------------------------- |
-| className    | string          | `''`       | Custom className to change UI.           |
-| tipFormatter | func            | `null`     | A function to custom tooltip value. Should return a string or DOM. |
-| min          | number          | `0`        | Slider min value.                        |
-| max          | number          | `100`      | Slider max value.                        |
-| value        | number or array | `10`       | When it be a number, Slider will render single range select. Or pass a array to support multi range select. |
-| minRange     | number          | `1`        | The minimum range value.                 |
-| color        | string          | `green`    | Theme color. Support `green`, `dark`, `blue`, `red`, `gray` |
-| onChange     | func            | `() => {}` | The callback when value changed.         |
+| name           | type                                    | default    | description                              |
+| -------------- | --------------------------------------- | ---------- | ---------------------------------------- |
+| tipFormatter   | `PropTypes.func`                        | `null`     | A function to custom tooltip value. Should return a string or DOM. |
+| min            | `PropTypes.number`                      | `0`        | Slider min value.                        |
+| max            | `PropTypes.number`                      | `100`      | Slider max value.                        |
+| value          | `PropTypes.number` or `PropTypes.array` | `10`       | When it be a number, Slider will render single range select. Or pass a array to support multi range select. |
+| minRange       | `PropTypes.number`                      | `1`        | The minimum range value between two pickers. |
+| jump           | `PropTypes.bool`                        | `false`    | When you are dragging the picker, `jump` decide to update the value by using `minJump`. |
+| minJump        | `PropTypes.number`                      | `1`        | The minimum value to change, should work with `jump` props. |
+| clickable      | `PropTypes.bool`                        | `false`    | Whether the row can be clicked or not.   |
+| updateWhenDrag | `PropTypes.bool`                        | `false`    | In default config, you will receive `onChange` callback after drag finished. But by setting `updateWhenDrag` to `true`, you can get callback as soon as `value` changed when dragging. |
+| onChange       | `PropTypes.func`                        | `() => {}` | The callback when value changed.         |
+
+### Custom style
+
+| name         | type               | default | description                              |
+| ------------ | ------------------ | ------- | ---------------------------------------- |
+| className    | `PropTypes.string` | `''`    | Custom className to change UI.           |
+| draggerClass | `PropTypes.string` | `''`    | Custom dragger style                     |
+| tipsoClass | `PropTypes.string` | `''`    | Custom tip style                     |
+| color        | `PropTypes.string` | `green` | Theme color. Support `green`, `dark`, `blue`, `red`, `gray` |
+| useTipso     | `PropTypes.bool`   | `true`  | Whether use tip or not when hover picker. |
 
 ## Dev
 
