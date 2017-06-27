@@ -5,5 +5,17 @@ import SliderWrapper from '../examples/SliderWrapper';
 
 storiesOf('Slider', module)
   .add('basical', () => (
-    <SliderWrapper />
+    <SliderWrapper
+    />
+  ))
+  .add('jump', () => (
+    <SliderWrapper
+      jump
+    />
+  ))
+  .add('clickable', () => (
+    <SliderWrapper
+      jump
+      clickable
+    />
   ));

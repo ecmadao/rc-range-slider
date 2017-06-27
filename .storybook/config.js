@@ -6,6 +6,7 @@ addDecorator((story) => {
 
 function loadStories() {
   require('../stories/Slider');
+  require('../stories/RangeSlider');
 }
 
 configure(loadStories, module);
