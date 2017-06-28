@@ -2,6 +2,9 @@ import React from 'react';
 import Slider from '../components/index';
 import styles from './styles.css';
 
+const MAX = 23;
+const MIN = 0;
+
 class SliderWrapper extends React.Component {
   constructor(props) {
     super(props);
@@ -9,10 +12,41 @@ class SliderWrapper extends React.Component {
       val: 0
     };
     this.onChange = this.onChange.bind(this);
+    this.onKeydown = this.onKeydown.bind(this);
   }
 
   onChange(val) {
     this.setState({ val });
+  }
+
+  componentDidMount() {
+    if (document.addEventListener) {
+      document.addEventListener('keydown', this.onKeydown, true);
+    } else {
+      document.attachEvent('onkeydown', this.onKeydown);
+    }
+  }
+
+  componentWillUnmount() {
+    if (document.removeEventListener) {
+      document.removeEventListener('keydown', this.onKeydown, true);
+    } else {
+      document.detachEvent('onkeydown', this.onKeydown);
+    }
+  }
+
+  onKeydown(e) {
+    const { val } = this.state;
+    const { keyCode } = e;
+    if ((keyCode === 37 || keyCode === 65) && val >= MIN + 1) {
+      // left
+      this.onChange(val - 1);
+    }
+    if ((keyCode === 39 || keyCode === 68) && val < MAX) {
+      // right
+      this.onChange(val + 1);
+    }
+    return false;
   }
 
   render() {
@@ -36,6 +70,8 @@ class SliderWrapper extends React.Component {
             minJump={4}
             updateWhenDrag
             value={val}
+            max={MAX}
+            min={MIN}
             clickable={clickable}
             onChange={this.onChange}
           />
@@ -50,6 +86,17 @@ class SliderWrapper extends React.Component {
             jump={jump}
             clickable={clickable}
             useTipso={false}
+            draggerClass={styles.dragger}
+          />
+        </div>
+        <div>
+          <Slider
+            jump
+            clickable
+            updateWhenDrag
+            max={MAX}
+            min={MIN}
+            value={val}
             draggerClass={styles.dragger}
           />
         </div>
