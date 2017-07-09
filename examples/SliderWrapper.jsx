@@ -58,7 +58,17 @@ class SliderWrapper extends React.Component {
         <div>
           <Slider
             value={15}
+            jump={jump}
+          />
+          <br />
+          <Slider
+            jump
             clickable={clickable}
+            updateWhenDrag
+            max={MAX}
+            min={MIN}
+            value={val}
+            draggerClass={styles.dragger}
           />
         </div>
         <br />
@@ -86,17 +96,6 @@ class SliderWrapper extends React.Component {
             jump={jump}
             clickable={clickable}
             useTipso={false}
-            draggerClass={styles.dragger}
-          />
-        </div>
-        <div>
-          <Slider
-            jump
-            clickable
-            updateWhenDrag
-            max={MAX}
-            min={MIN}
-            value={val}
             draggerClass={styles.dragger}
           />
         </div>

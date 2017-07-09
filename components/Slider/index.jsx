@@ -228,7 +228,7 @@ class Slider extends React.Component {
     if (positions.length === 1) {
       maxLeft = 0;
     }
-    const length = (max - min) / minJump;
+    const length = Math.ceil((max - min) / minJump);
     return Utils.createArray(length + 2).map((val, index) => {
       const left = index / length;
       return (
