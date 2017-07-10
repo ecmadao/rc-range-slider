@@ -2,7 +2,7 @@ import React from 'react';
 import Slider from '../components/index';
 import styles from './styles.css';
 
-const MAX = 23;
+const MAX = 24;
 const MIN = 0;
 
 class SliderWrapper extends React.Component {

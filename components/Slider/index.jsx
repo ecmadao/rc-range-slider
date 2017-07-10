@@ -21,6 +21,7 @@ class Slider extends React.Component {
     this.onDraging = this.onDraging.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
     this.onDragMove = this.onDragMove.bind(this);
+    this.resetOrigin = this.resetOrigin.bind(this);
     this.changePosition = this.changePosition.bind(this);
   }
 
@@ -70,7 +71,9 @@ class Slider extends React.Component {
   }
 
   resetOrigin() {
-    const pathway = ReactDOM.findDOMNode(this.pathway).getBoundingClientRect();
+    const pathwayDOM = ReactDOM.findDOMNode(this.pathway);
+    const pathway = pathwayDOM.getBoundingClientRect();
+
     const maxDis = pathway.width;
     const maxLeft = pathway.left;
     this.setState({ maxDis, maxLeft });
@@ -255,7 +258,8 @@ class Slider extends React.Component {
       <div className={containerClass}>
         <div
           className={styles.pathway}
-          ref={ref => this.pathway = ref}>
+          id="pathway"
+          ref={(ref) => this.pathway = ref}>
           {this.renderSections()}
           {this.renderDrager()}
           {this.renderProgressBar()}
