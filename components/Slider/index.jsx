@@ -165,11 +165,12 @@ class Slider extends React.Component {
       min,
       jump,
       color,
-      useTipso,
-      minRange,
       minJump,
-      draggerClass,
+      minRange,
+      useTipso,
+      showTipso,
       tipsoClass,
+      draggerClass,
       tipFormatter,
     } = this.props;
     const minDis = minRange / (max - min);
@@ -182,12 +183,14 @@ class Slider extends React.Component {
       const maxPosition = index + 1 < positions.length
         ? positions[index + 1].left - minDis
         : 1;
+
       return (
         <Dragger
           jump={jump}
           key={index}
           left={left}
           useTipso={useTipso}
+          showTipso={showTipso}
           maxDis={maxDis}
           maxLeft={maxLeft}
           color={color}
@@ -284,6 +287,7 @@ Slider.propTypes = {
   tipsoClass: PropTypes.string,
   onChange: PropTypes.func,
   useTipso: PropTypes.bool,
+  showTipso: PropTypes.bool,
   jump: PropTypes.bool,
   minJump: PropTypes.number,
   clickable: PropTypes.bool,
@@ -300,6 +304,7 @@ Slider.defaultProps = {
   color: 'green',
   onChange: () => {},
   useTipso: true,
+  showTipso: false,
   draggerClass: '',
   tipsoClass: '',
   jump: false,

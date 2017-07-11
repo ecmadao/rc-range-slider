@@ -50,7 +50,7 @@ class SliderWrapper extends React.Component {
   }
 
   render() {
-    const { jump, clickable } = this.props;
+    const { jump, clickable, showTipso = false } = this.props;
     const { val } = this.state;
     return (
       <div id="components-container">
@@ -62,12 +62,30 @@ class SliderWrapper extends React.Component {
           />
           <br />
           <Slider
+            showTipso
+            value={15}
+            jump={jump}
+          />
+          <br />
+          <Slider
             jump
-            clickable={clickable}
-            updateWhenDrag
             max={MAX}
             min={MIN}
             value={val}
+            updateWhenDrag
+            showTipso={showTipso}
+            clickable={clickable}
+            draggerClass={styles.dragger}
+          />
+          <br/>
+          <Slider
+            jump
+            max={MAX}
+            min={MIN}
+            value={val}
+            showTipso
+            updateWhenDrag
+            clickable={clickable}
             draggerClass={styles.dragger}
           />
         </div>
@@ -76,13 +94,14 @@ class SliderWrapper extends React.Component {
         <div>
           <div>{val}</div>
           <Slider
-            jump={jump}
-            minJump={4}
-            updateWhenDrag
-            value={val}
             max={MAX}
             min={MIN}
+            jump={jump}
+            minJump={4}
+            value={val}
+            updateWhenDrag
             clickable={clickable}
+            showTipso={showTipso}
             onChange={this.onChange}
           />
         </div>
@@ -94,8 +113,9 @@ class SliderWrapper extends React.Component {
             max={24}
             value={24}
             jump={jump}
-            clickable={clickable}
             useTipso={false}
+            clickable={clickable}
+            showTipso={showTipso}
             draggerClass={styles.dragger}
           />
         </div>

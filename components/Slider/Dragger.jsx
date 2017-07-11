@@ -9,7 +9,8 @@ class Dragger extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      draging: false
+      draging: false,
+      showTipso: props.showTipso
     };
     this.startX = 0;
 
@@ -71,7 +72,8 @@ class Dragger extends React.Component {
   handleMouseUp(e) {
     if (this.state.draging) {
       this.setState({
-        draging: false
+        draging: false,
+        showTipso: false,
       });
       const pos = darg.mousePosition(e);
       this.setLeft(pos, true);
@@ -124,25 +126,27 @@ class Dragger extends React.Component {
 
   render() {
     const {
-      color,
       left,
       value,
-      tipFormatter,
+      color,
       useTipso,
+      showTipso,
+      tipsoClass,
       draggerClass,
-      tipsoClass
+      tipFormatter,
     } = this.props;
     const dragClass = cx(
       styles.dragger,
       color && styles[color],
-      draggerClass
+      draggerClass,
     );
+
     const tipsoValue = tipFormatter ? tipFormatter(value) : value;
     return (
       <Tipso
         theme="dark"
+        show={showTipso}
         disabled={!useTipso}
-        show={this.state.draging}
         tipsoContent={(
           <div
             style={{
@@ -178,6 +182,7 @@ Dragger.propTypes = {
   onDragEnd: PropTypes.func,
   onDraging: PropTypes.func,
   useTipso: PropTypes.bool,
+  showTipso: PropTypes.bool,
   draggerClass: PropTypes.string,
   tipsoClass: PropTypes.string,
 };
@@ -192,6 +197,7 @@ Dragger.defaultProps = {
   onDragEnd: () => {},
   onDraging: () => {},
   useTipso: true,
+  showTipso: false,
   draggerClass: '',
   tipsoClass: '',
 };
