@@ -28,7 +28,7 @@ class RangeSliderWrapper extends React.Component {
             max={20}
             value={[2, 8]}
             minRange={1}
-            minJump={2}
+            sectionRange={2}
           />
         </div>
         <br />
@@ -41,7 +41,7 @@ class RangeSliderWrapper extends React.Component {
             clickable
             value={[2, 8]}
             minRange={1}
-            minJump={2}
+            sectionRange={2}
           />
         </div>
         <br />
@@ -54,7 +54,7 @@ class RangeSliderWrapper extends React.Component {
             clickable
             value={[2, 6, 10, 15]}
             minRange={1}
-            minJump={2}
+            sectionRange={4}
           />
         </div>
       </div>

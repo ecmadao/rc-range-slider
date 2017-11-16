@@ -97,12 +97,23 @@ class SliderWrapper extends React.Component {
             max={MAX}
             min={MIN}
             jump={jump}
-            minJump={4}
+            sectionRange={4}
             value={val}
             updateWhenDrag
             clickable={clickable}
             showTipso={showTipso}
             onChange={this.onChange}
+          />
+        </div>
+        <br />
+        <h4>...with drag section</h4>
+        <div>
+          <Slider
+            jump
+            min={0}
+            max={24}
+            clickable
+            sectionRange={4}
           />
         </div>
         <br />

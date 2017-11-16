@@ -49,7 +49,7 @@
   }
 }
 
-.dragger-container {
+.draggerContainer {
   left: 0;
   cursor: pointer;
   z-index: var(--zIndex9);
@@ -58,8 +58,16 @@
   top: calc((var(--pathwayHeight) - var(--draggerSize) - 2 * var(--draggerBorder)) / 2);
 }
 
+.draggerSectionContainer {
+  top: 0;
+}
+
 .tipso {
   min-width: inherit !important;
+}
+
+.sectionTipso {
+  bottom: calc(100% + 10px);
 }
 
 .dragSection {
@@ -68,13 +76,17 @@
   border-radius: 50%;
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.3);
-  position: absolute;
   z-index: 2;
+  opacity: 0;
   transform: translateX(-50%);
 
   &.light {
     background-color: rgba(255, 255, 255, 0.6);
   }
+}
+
+.dragSectionEnable {
+  opacity: 1;
 }
 
 .dragger {

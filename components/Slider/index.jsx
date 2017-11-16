@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import cx from 'classnames';
 import objectAssign from 'object-assign';
+import Tipso from 'rc-tipso';
 import Dragger from './Dragger';
 import ProgressBar from './ProgressBar';
 import styles from './slider.css';
@@ -105,6 +106,18 @@ class Slider extends React.Component {
     return Math.round(left * (max - min) + min);
   }
 
+  getIndexByPos(pos) {
+    const { positions } = this.state;
+    const leftOffsets = positions.map(position => Math.abs(position.left - pos));
+    const minLeftOffset = Math.min(...leftOffsets).toFixed(2);
+    const index = Utils.findFirstIndex({
+      array: positions,
+      getVal: (position) => position.left,
+      check: val => Math.abs(val - pos).toFixed(2) === minLeftOffset
+    });
+    return index;
+  }
+
   onDraging(index) {
     const { updateWhenDrag } = this.props;
     return left => {
@@ -131,15 +144,8 @@ class Slider extends React.Component {
   }
 
   onDragMove(leftPos) {
+    const index = this.getIndexByPos(leftPos);
     return () => {
-      const { positions } = this.state;
-      const leftOffsets = positions.map(position => Math.abs(position.left - leftPos));
-      const minLeftOffset = Math.min(...leftOffsets).toFixed(2);
-      const index = Utils.findFirstIndex({
-        array: positions,
-        getVal: (position) => position.left,
-        check: val => Math.abs(val - leftPos).toFixed(2) === minLeftOffset
-      });
       this.onDragEnd(index)(leftPos);
     };
   }
@@ -165,15 +171,14 @@ class Slider extends React.Component {
       min,
       jump,
       color,
-      minJump,
-      minRange,
+      jumpRange,
       useTipso,
       showTipso,
       tipsoClass,
       draggerClass,
       tipFormatter,
     } = this.props;
-    const minDis = minRange / (max - min);
+    const minDis = jumpRange / (max - min);
     return positions.map((item, index) => {
       const { left } = item;
       const value = this.getValue(left);
@@ -199,7 +204,7 @@ class Slider extends React.Component {
           min={minPosition}
           maxValue={max}
           minValue={min}
-          minJump={minJump}
+          jumpRange={jumpRange}
           draggerClass={draggerClass}
           tipsoClass={tipsoClass}
           onDragEnd={this.onDragEnd(index)}
@@ -225,8 +230,17 @@ class Slider extends React.Component {
   }
 
   renderSections() {
-    const { clickable, max, min, minJump, jump } = this.props;
-    if (!clickable || !jump || minJump <= 0) return null;
+    const {
+      max,
+      min,
+      jump,
+      jumpRange,
+      clickable,
+      tipsoClass,
+      tipFormatter,
+      sectionRange,
+    } = this.props;
+    if (!clickable || !jump || jumpRange <= 0 || sectionRange <= 0) return null;
     const { positions } = this.state;
     const lefts = positions.map(position => position.left);
     let maxLeft = Math.min(...lefts);
@@ -234,19 +248,44 @@ class Slider extends React.Component {
     if (positions.length === 1) {
       maxLeft = 0;
     }
-    const length = Math.ceil((max - min) / minJump);
-    return Utils.createArray(length + 2).map((val, index) => {
-      const left = index / length;
+    const length = Math.ceil((max - min) / jumpRange);
+    return Utils.createArray(length + 2).map((val, i) => {
+      const left = i / length;
+      const value = this.getValue(left);
+      const tipsoValue = tipFormatter ? tipFormatter(value) : value;
       return (
-        <div
-          key={index}
-          style={{ left: `${left * 100}%` }}
-          className={cx(
-            styles.dragSection,
-            left >= maxLeft && left <= maxRight && styles.light
+        <Tipso
+          key={i}
+          theme="dark"
+          tipsoContent={(
+            <div
+              style={{
+                textAlign: 'center',
+                minWidth: `${(tipsoValue.length + 1) * 5}px`
+              }}
+            >{tipsoValue}</div>
           )}
-          onClick={this.onDragMove(left)}
-        />
+          className={cx(
+            styles.tipso,
+            styles.sectionTipso,
+            tipsoClass
+          )}
+          wrapperClass={cx(
+            styles.draggerContainer,
+            styles.draggerSectionContainer
+          )}
+          wrapperStyle={{
+            left: `${left * 100}%`
+          }}>
+          <div
+            className={cx(
+              styles.dragSection,
+              i % sectionRange === 0 && styles.dragSectionEnable,
+              left >= maxLeft && left <= maxRight && styles.light
+            )}
+            onClick={this.onDragMove(left)}
+          />
+        </Tipso>
       );
     });
   }
@@ -289,7 +328,8 @@ Slider.propTypes = {
   useTipso: PropTypes.bool,
   showTipso: PropTypes.bool,
   jump: PropTypes.bool,
-  minJump: PropTypes.number,
+  jumpRange: PropTypes.number,
+  sectionRange: PropTypes.number,
   clickable: PropTypes.bool,
   updateWhenDrag: PropTypes.bool,
 };
@@ -308,7 +348,8 @@ Slider.defaultProps = {
   draggerClass: '',
   tipsoClass: '',
   jump: false,
-  minJump: 1,
+  jumpRange: 1,
+  sectionRange: 1,
   clickable: false,
   updateWhenDrag: false,
 };

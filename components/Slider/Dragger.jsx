@@ -99,11 +99,11 @@ class Dragger extends React.Component {
       jump,
       maxValue,
       minValue,
-      minJump,
       maxDis,
       maxLeft,
       onDragEnd,
       onDraging,
+      jumpRange,
     } = this.props;
     const leftLength = dragX - maxLeft;
     const offsetPercentage = leftLength / maxDis;
@@ -112,9 +112,9 @@ class Dragger extends React.Component {
       offsetPercentage, min, max);
     if (jump) {
       let val = validateLeft * (maxValue - minValue);
-      const offset = val % minJump;
-      val = offset > (minJump / 2)
-        ? val - offset + minJump
+      const offset = val % jumpRange;
+      val = offset > (jumpRange / 2)
+        ? val - offset + jumpRange
         : val - offset;
       validateLeft = val / (maxValue - minValue);
     }
@@ -159,7 +159,7 @@ class Dragger extends React.Component {
           styles.tipso,
           tipsoClass
         )}
-        wrapperClass={styles['dragger-container']}
+        wrapperClass={styles.draggerContainer}
         wrapperStyle={{
           left: `${left * 100}%`
         }}>
