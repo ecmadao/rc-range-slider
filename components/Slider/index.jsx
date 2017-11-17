@@ -21,7 +21,13 @@ class Slider extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onDraging = this.onDraging.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
-    this.onDragMove = this.onDragMove.bind(this);
+    this.onSectionClick = this.onSectionClick.bind(this);
+
+    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
+    this.onMouseOver = this.onMouseOver.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
+
     this.resetOrigin = this.resetOrigin.bind(this);
     this.changePosition = this.changePosition.bind(this);
   }
@@ -67,7 +73,8 @@ class Slider extends React.Component {
     });
     return {
       positions,
-      values
+      values,
+      tipsoPosition: positions[0].left
     };
   }
 
@@ -118,36 +125,108 @@ class Slider extends React.Component {
     return index;
   }
 
-  onDraging(index) {
+  onDraging(index, left) {
     const { updateWhenDrag } = this.props;
-    return left => {
-      const pos = this.changePosition(index, { left });
-      if (updateWhenDrag) {
-        this.onChange({
-          index,
-          left,
-          pos
-        });
-      }
-    };
-  }
-
-  onDragEnd(index) {
-    return left => {
-      const pos = this.changePosition(index, { left });
+    const pos = this.changePosition(index, { left });
+    if (updateWhenDrag) {
       this.onChange({
         index,
         left,
         pos
       });
+    }
+  }
+
+  onDragEnd(index, left) {
+    const pos = this.changePosition(index, { left });
+    this.onChange({
+      index,
+      left,
+      pos
+    });
+  }
+
+  onSectionClick(leftPos) {
+    const index = this.getIndexByPos(leftPos);
+    return () => {
+      this.onDragEnd(index, leftPos);
     };
   }
 
-  onDragMove(leftPos) {
-    const index = this.getIndexByPos(leftPos);
-    return () => {
-      this.onDragEnd(index)(leftPos);
-    };
+  getValidateLeft(offsetLeft, index = null) {
+    const { maxDis, maxLeft, positions } = this.state;
+    const {
+      max,
+      min,
+      jump,
+      jumpRange,
+    } = this.props;
+
+    const minDis = jumpRange / (max - min);
+    const minPosition = index && index - 1 >= 0
+      ? positions[index - 1].left + minDis
+      : 0;
+    const maxPosition = index && index + 1 < positions.length
+      ? positions[index + 1].left - minDis
+      : 1;
+
+    const leftLength = offsetLeft - maxLeft;
+    const offsetPercentage = leftLength / maxDis;
+
+    let validateLeft = Utils.validatePosition(
+      offsetPercentage, minPosition, maxPosition);
+    if (jump) {
+      let val = validateLeft * (max - min);
+      const offset = val % jumpRange;
+      val = offset > (jumpRange / 2)
+        ? val - offset + jumpRange
+        : val - offset;
+      validateLeft = val / (max - min);
+    }
+    return validateLeft;
+  }
+
+  onMouseUp(index, pos) {
+    const validateLeft = this.getValidateLeft(pos.x, index);
+    this.onDraging(index, validateLeft);
+    this.onDragEnd(index, validateLeft);
+  }
+
+  onMouseMove(index, pos) {
+    const validateLeft = this.getValidateLeft(pos.x, index);
+    this.onDraging(index, validateLeft);
+  }
+
+  handleTipsoMove(e) {
+    const event = e || window.event;
+    const pos = Utils.mousePosition(event);
+    const validateLeft = this.getValidateLeft(pos.x);
+    this.setState({
+      tipsoPosition: validateLeft
+    });
+    return validateLeft;
+  }
+
+  onMouseOver(e) {
+    this.handleTipsoMove(e);
+  }
+
+  onMouseDown(e) {
+    const validateLeft = this.handleTipsoMove(e);
+    // get closest index
+    const { positions } = this.state;
+    const offsets = positions.map(
+      item => Math.abs(item.left - validateLeft)
+    );
+    let index = 0;
+    let minOffset = offsets[index];
+    for (let i = 1; i < offsets.length; i += 1) {
+      if (offsets[i] < minOffset) {
+        index = i;
+        minOffset = offsets[i];
+      }
+    }
+    this.onDragEnd(index, validateLeft);
   }
 
   changePosition(index, position) {
@@ -165,23 +244,17 @@ class Slider extends React.Component {
   }
 
   renderDrager() {
-    const { positions, maxDis, maxLeft } = this.state;
+    const { positions } = this.state;
     const {
       max,
       min,
-      jump,
       color,
       jumpRange,
-      useTipso,
-      showTipso,
-      tipsoClass,
       draggerClass,
-      tipFormatter,
     } = this.props;
     const minDis = jumpRange / (max - min);
     return positions.map((item, index) => {
       const { left } = item;
-      const value = this.getValue(left);
       const minPosition = index - 1 >= 0
         ? positions[index - 1].left + minDis
         : 0;
@@ -191,25 +264,15 @@ class Slider extends React.Component {
 
       return (
         <Dragger
-          jump={jump}
           key={index}
           left={left}
-          useTipso={useTipso}
-          showTipso={showTipso}
-          maxDis={maxDis}
-          maxLeft={maxLeft}
+          index={index}
           color={color}
-          value={value}
           max={maxPosition}
           min={minPosition}
-          maxValue={max}
-          minValue={min}
-          jumpRange={jumpRange}
           draggerClass={draggerClass}
-          tipsoClass={tipsoClass}
-          onDragEnd={this.onDragEnd(index)}
-          onDraging={this.onDraging(index)}
-          tipFormatter={tipFormatter}
+          onMouseUp={this.onMouseUp}
+          onMouseMove={this.onMouseMove}
         />
       );
     });
@@ -236,8 +299,6 @@ class Slider extends React.Component {
       jump,
       jumpRange,
       clickable,
-      tipsoClass,
-      tipFormatter,
       sectionRange,
     } = this.props;
     if (!clickable || !jump || jumpRange <= 0 || sectionRange <= 0) return null;
@@ -248,64 +309,79 @@ class Slider extends React.Component {
     if (positions.length === 1) {
       maxLeft = 0;
     }
-    const length = Math.ceil((max - min) / jumpRange);
+    const length = Math.ceil((max - min) / sectionRange);
     return Utils.createArray(length + 2).map((val, i) => {
       const left = i / length;
-      const value = this.getValue(left);
-      const tipsoValue = tipFormatter ? tipFormatter(value) : value;
       return (
-        <Tipso
+        <div
           key={i}
+          style={{ left: `${left * 100}%` }}
+          className={cx(
+            styles.dragSection,
+            styles.dragSectionEnable,
+            left >= maxLeft && left <= maxRight && styles.light
+          )}
+          onClick={this.onSectionClick(left)}
+        />
+      );
+    });
+  }
+
+  render() {
+    const {
+      className,
+      tipsoClass,
+      tipFormatter,
+      useTipso,
+      showTipso,
+    } = this.props;
+    const { tipsoPosition } = this.state;
+    const containerClass = cx(
+      styles.container,
+      className
+    );
+    const value = this.getValue(tipsoPosition);
+    const tipsoValue = tipFormatter ? tipFormatter(value) : value;
+    return (
+      <div
+        className={containerClass}
+        onMouseOver={this.onMouseOver}
+        onMouseMove={this.onMouseOver}
+      >
+        <Tipso
           theme="dark"
+          show={showTipso}
+          disabled={!useTipso}
           tipsoContent={(
             <div
               style={{
                 textAlign: 'center',
                 minWidth: `${(tipsoValue.length + 1) * 5}px`
               }}
-            >{tipsoValue}</div>
+            >
+              {tipsoValue}
+            </div>
           )}
           className={cx(
-            styles.tipso,
-            styles.sectionTipso,
+            styles.sliderTipso,
             tipsoClass
           )}
-          wrapperClass={cx(
-            styles.draggerContainer,
-            styles.draggerSectionContainer
-          )}
-          wrapperStyle={{
-            left: `${left * 100}%`
-          }}>
+          tipsoStyle={{
+            left: `${tipsoPosition * 100}%`
+          }}
+          wrapperClass={styles.sliderContainer}
+        >
           <div
-            className={cx(
-              styles.dragSection,
-              i % sectionRange === 0 && styles.dragSectionEnable,
-              left >= maxLeft && left <= maxRight && styles.light
-            )}
-            onClick={this.onDragMove(left)}
-          />
+            className={styles.pathway}
+            id="pathway"
+            ref={(ref) => this.pathway = ref}
+            onMouseDown={this.onMouseDown}
+          >
+            {this.renderSections()}
+            {this.renderDrager()}
+            {this.renderProgressBar()}
+          </div>
         </Tipso>
-      );
-    });
-  }
-
-  render() {
-    const { className } = this.props;
-    const containerClass = cx(
-      styles.container,
-      className
-    );
-    return (
-      <div className={containerClass}>
-        <div
-          className={styles.pathway}
-          id="pathway"
-          ref={(ref) => this.pathway = ref}>
-          {this.renderSections()}
-          {this.renderDrager()}
-          {this.renderProgressBar()}
-        </div>
       </div>
     );
   }
