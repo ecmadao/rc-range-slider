@@ -117,6 +117,17 @@ class SliderWrapper extends React.Component {
           />
         </div>
         <br />
+        <h4>Support given different section range</h4>
+        <div>
+          <Slider
+            jump
+            min={0}
+            max={24}
+            clickable
+            sectionRange={[1, 2, 3, 4]}
+          />
+        </div>
+        <br />
         <h4>Custom (Without tip, curstom dragger style)</h4>
         <div>
           <Slider

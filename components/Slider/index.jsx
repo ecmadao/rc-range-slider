@@ -292,16 +292,48 @@ class Slider extends React.Component {
     );
   }
 
+  get validateSectionRange() {
+    const { sectionRange, max, min } = this.props;
+    const arr = [];
+    if (Utils.isArray(sectionRange)) {
+      let sum = min;
+      arr.push(0);
+      for (let i = 0; i < sectionRange.length; i += 1) {
+        const range = sectionRange[i];
+        if (sum + range <= max) {
+          arr.push(range);
+          sum += range;
+          if (sum === max) break;
+        } else {
+          arr.push(max - sum);
+          break;
+        }
+      }
+      return arr;
+    } else if (Utils.isNumber(sectionRange)) {
+      arr.push(0);
+      const count = Math.ceil((max - min) / sectionRange);
+      for (let i = 1; i <= count; i += 1) {
+        if (i === count) {
+          arr.push(max - min - (i - 1) * sectionRange);
+        } else {
+          arr.push(sectionRange);
+        }
+      }
+      return arr;
+    }
+    return arr;
+  }
+
   renderSections() {
     const {
-      max,
-      min,
       jump,
       jumpRange,
       clickable,
-      sectionRange,
     } = this.props;
-    if (!clickable || !jump || jumpRange <= 0 || sectionRange <= 0) return null;
+    const sectionRange = this.validateSectionRange;
+
+    if (!clickable || !jump || jumpRange <= 0 || !sectionRange.length) return null;
     const { positions } = this.state;
     const lefts = positions.map(position => position.left);
     let maxLeft = Math.min(...lefts);
@@ -309,12 +341,15 @@ class Slider extends React.Component {
     if (positions.length === 1) {
       maxLeft = 0;
     }
-    const length = Math.ceil((max - min) / sectionRange);
-    return Utils.createArray(length + 2).map((val, i) => {
-      const left = i / length;
+
+    let offsetLeft = 0;
+    const sum = sectionRange.reduce((pre, cur) => pre + cur, 0);
+    return sectionRange.map((section, index) => {
+      offsetLeft += section;
+      const left = offsetLeft / sum;
       return (
         <div
-          key={i}
+          key={index}
           style={{ left: `${left * 100}%` }}
           className={cx(
             styles.dragSection,
@@ -405,7 +440,10 @@ Slider.propTypes = {
   showTipso: PropTypes.bool,
   jump: PropTypes.bool,
   jumpRange: PropTypes.number,
-  sectionRange: PropTypes.number,
+  sectionRange: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.array
+  ]),
   clickable: PropTypes.bool,
   updateWhenDrag: PropTypes.bool,
 };
@@ -425,7 +463,7 @@ Slider.defaultProps = {
   tipsoClass: '',
   jump: false,
   jumpRange: 1,
-  sectionRange: 1,
+  sectionRange: null,
   clickable: false,
   updateWhenDrag: false,
 };

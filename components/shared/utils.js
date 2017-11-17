@@ -1,4 +1,5 @@
-const isArray = (array) => Object.prototype.toString.call(array) === '[object Array]';
+const isArray = array => Object.prototype.toString.call(array) === '[object Array]';
+const isNumber = num => Object.prototype.toString.call(num) === '[object Number]';
 
 const isEqual = (arrayA, arrayB) => {
   for (let i = 0; i < arrayA.length; i++) {
@@ -39,7 +40,7 @@ const getStandardAbsolutePosition = (position, minPosition, maxPosition) => {
   return position;
 };
 
-const createArray = (length) => new Array(length).join('0').split('');
+const createArray = length => new Array(length).join('0').split('');
 
 const findFirstIndex = (options = {}) => {
   const {
@@ -75,6 +76,7 @@ export const checkSameArray = (arrayA, arrayB) => {
 export default {
   isArray,
   isEqual,
+  isNumber,
   createArray,
   checkSameArray,
   mousePosition,
