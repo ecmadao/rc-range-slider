@@ -27,6 +27,7 @@ class Slider extends React.Component {
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
 
     this.resetOrigin = this.resetOrigin.bind(this);
     this.changePosition = this.changePosition.bind(this);
@@ -207,6 +208,13 @@ class Slider extends React.Component {
     return validateLeft;
   }
 
+  onMouseLeave() {
+    const { positions } = this.state;
+    this.setState({
+      tipsoPosition: positions[0].left
+    });
+  }
+
   onMouseOver(e) {
     this.handleTipsoMove(e);
   }
@@ -382,6 +390,7 @@ class Slider extends React.Component {
         className={containerClass}
         onMouseOver={this.onMouseOver}
         onMouseMove={this.onMouseOver}
+        onMouseLeave={this.onMouseLeave}
       >
         <Tipso
           theme="dark"
