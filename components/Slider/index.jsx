@@ -18,6 +18,7 @@ class Slider extends React.Component {
         maxDis: 0
       }
     );
+    this.readyGoBack = false;
     this.onChange = this.onChange.bind(this);
     this.onDraging = this.onDraging.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
@@ -210,12 +211,19 @@ class Slider extends React.Component {
 
   onMouseLeave() {
     const { positions } = this.state;
-    this.setState({
-      tipsoPosition: positions[0].left
-    });
+    // give some time to avoid to quick to go back
+    this.readyGoBack = true;
+    setTimeout(() => {
+      if (this.readyGoBack) {
+        this.setState({
+          tipsoPosition: positions[0].left
+        });
+      }
+    }, 1000);
   }
 
   onMouseOver(e) {
+    this.readyGoBack = false;
     this.handleTipsoMove(e);
   }
 
