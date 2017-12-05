@@ -165,10 +165,10 @@ class Slider extends React.Component {
     } = this.props;
 
     const minDis = jumpRange / (max - min);
-    const minPosition = index && index - 1 >= 0
+    const minPosition = index !== null && index - 1 >= 0
       ? positions[index - 1].left + minDis
       : 0;
-    const maxPosition = index && index + 1 < positions.length
+    const maxPosition = index !== null && index + 1 < positions.length
       ? positions[index + 1].left - minDis
       : 1;
 
