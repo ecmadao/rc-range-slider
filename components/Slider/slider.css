@@ -15,18 +15,29 @@
 
 .pathway {
   width: 100%;
-  height: var(--pathwayHeight);
+  height: var(--pathwayMargin);
   position: relative;
   border-radius: var(--radius-small);
-  background-color: var(--gray-light);
+
+  &::before {
+    content: "";
+    display: block;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: var(--pathwayHeight);
+    background-color: var(--gray-light);
+  }
 }
 
 .progress-bar {
   z-index: var(--zIndex1);
-  height: 100%;
+  height: var(--pathwayHeight);
   position: absolute;
   border-radius: var(--radius-small);
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
 
   &.bar-green {
     background-color: var(--green);
@@ -71,7 +82,7 @@
 }
 
 .sliderTipso {
-  bottom: 15px;
+  bottom: calc(100% + 8px);
   left: 20%;
   min-width: inherit !important;
   transition: all .2s;
@@ -89,8 +100,9 @@
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 2;
   opacity: 0;
+  top: 50%;
   position: absolute;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
 
   &.light {
     background-color: rgba(255, 255, 255, 0.6);
@@ -106,6 +118,9 @@
   height: var(--draggerSize);
   cursor: pointer;
   border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
   background-color: var(--white);
 
   &.green {
