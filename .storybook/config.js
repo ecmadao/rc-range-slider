@@ -1,4 +1,4 @@
-import { configure, addDecorator } from '@kadira/storybook';
+import { configure, addDecorator } from '@storybook/react';
 
 addDecorator((story) => {
   return (story());
