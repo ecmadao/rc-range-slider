@@ -93,6 +93,7 @@ Click [here](./examples/SliderWrapper.jsx) to see tipso usage examples.
 | className    | `PropTypes.string` | `''`    | Custom className to change UI.           |
 | draggerClass | `PropTypes.string` | `''`    | Custom dragger style                     |
 | tipsoClass | `PropTypes.string` | `''`    | Custom tip style                     |
+| pathwayClass | `PropTypes.string` | `''`    | Custom pathway style                     |
 | color        | `PropTypes.string` | `green` | Theme color. Support `green`, `dark`, `blue`, `red`, `gray` |
 | useTipso     | `PropTypes.bool`   | `true`  | Whether use tip or not when hover picker. |
 
