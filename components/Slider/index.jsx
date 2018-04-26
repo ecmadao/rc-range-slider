@@ -383,6 +383,7 @@ class Slider extends React.Component {
     const {
       className,
       tipsoClass,
+      pathwayClass,
       tipFormatter,
       useTipso,
       showTipso,
@@ -425,7 +426,10 @@ class Slider extends React.Component {
           wrapperClass={styles.sliderContainer}
         >
           <div
-            className={styles.pathway}
+            className={cx(
+              styles.pathway,
+              pathwayClass
+            )}
             id="pathway"
             ref={(ref) => this.pathway = ref}
             onMouseDown={this.onMouseDown}
@@ -453,6 +457,7 @@ Slider.propTypes = {
   color: PropTypes.string,
   draggerClass: PropTypes.string,
   tipsoClass: PropTypes.string,
+  pathwayClass: PropTypes.string,
   onChange: PropTypes.func,
   useTipso: PropTypes.bool,
   showTipso: PropTypes.bool,
@@ -479,6 +484,7 @@ Slider.defaultProps = {
   showTipso: false,
   draggerClass: '',
   tipsoClass: '',
+  pathwayClass: '',
   jump: false,
   jumpRange: 1,
   sectionRange: null,
