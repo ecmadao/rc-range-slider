@@ -22,18 +22,52 @@ $ npm i rc-range-slider --save
 
 ### Build config
 
-use webpack as example
+- Webpack 3.x config example
 
 ```javascript
 // webpack config file
 
-// css loaders
-const cssLoaders = [
-  'style-loader',
-  'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
-  'postcss-loader'
-];
+// loaders
+const postcssLoader = {
+  loader: 'postcss-loader',
+  options: {
+    config: {
+      path: path.join(__dirname, 'postcss.config.js')
+    }
+  }
+};
+const cssModulesLoader = ExtractTextPlugin.extract({
+  fallback: 'style-loader',
+  use: [
+    {
+      loader: 'css-loader',
+      options: {
+        modules: true,
+        sourceMaps: true,
+        importLoaders: 1,
+        localIdentName: '[name]__[local]___[hash:base64:5]'
+      }
+    },
+    postcssLoader
+  ],
+});
 
+const webpackConfig = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        include: /rc-range-slider|rc-tipso/,
+        loaders: cssModulesLoader
+      }
+    ]
+  }
+};
+```
+
+- Webpack 1.x config example
+
+```javascript
 const webpackConfig = {
   module: {
     loaders: [
