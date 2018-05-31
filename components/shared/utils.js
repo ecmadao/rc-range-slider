@@ -1,3 +1,4 @@
+
 const isArray = array => Object.prototype.toString.call(array) === '[object Array]';
 const isNumber = num => Object.prototype.toString.call(num) === '[object Number]';
 

@@ -57,11 +57,13 @@ class SliderWrapper extends React.Component {
         <h4>Default</h4>
         <div>
           <Slider
+            id="1"
             value={15}
             jump={jump}
           />
           <br />
           <Slider
+            id="2"
             showTipso
             value={15}
             jump={jump}
@@ -69,6 +71,7 @@ class SliderWrapper extends React.Component {
           <br />
           <Slider
             jump
+            id="3"
             max={MAX}
             min={MIN}
             value={val}
@@ -80,6 +83,7 @@ class SliderWrapper extends React.Component {
           <br/>
           <Slider
             jump
+            id="4"
             max={MAX}
             min={MIN}
             value={val}
@@ -94,6 +98,7 @@ class SliderWrapper extends React.Component {
         <div>
           <div>{val}</div>
           <Slider
+            id="5"
             max={MAX}
             min={MIN}
             jump={jump}
@@ -110,6 +115,7 @@ class SliderWrapper extends React.Component {
         <div>
           <Slider
             jump
+            id="6"
             min={0}
             max={24}
             clickable
@@ -121,6 +127,7 @@ class SliderWrapper extends React.Component {
         <div>
           <Slider
             jump
+            id="7"
             min={0}
             max={24}
             clickable
@@ -131,6 +138,7 @@ class SliderWrapper extends React.Component {
         <h4>Custom (Without tip, curstom dragger style)</h4>
         <div>
           <Slider
+            id="8"
             min={1}
             max={24}
             value={24}

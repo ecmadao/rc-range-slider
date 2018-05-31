@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import cx from 'classnames';
 import objectAssign from 'object-assign';
 import Tipso from 'rc-tipso';
+import { ResizeSensor } from 'css-element-queries';
 import Dragger from './Dragger';
 import ProgressBar from './ProgressBar';
 import styles from './slider.css';
@@ -37,6 +38,9 @@ class Slider extends React.Component {
 
   componentDidMount() {
     this.resetOrigin();
+    const id = this.props.id || 'light-ui-slider';
+    new ResizeSensor(document.getElementById(id), this.resetOrigin); // eslint-disable-line no-new
+
     if (window.addEventListener) {
       window.addEventListener('resize', this.resetOrigin, true);
     } else {
@@ -381,14 +385,16 @@ class Slider extends React.Component {
 
   render() {
     const {
+      id,
+      useTipso,
+      showTipso,
       className,
       tipsoClass,
       pathwayClass,
       tipFormatter,
-      useTipso,
-      showTipso,
     } = this.props;
     const { tipsoPosition } = this.state;
+
     const containerClass = cx(
       styles.container,
       className
@@ -397,6 +403,7 @@ class Slider extends React.Component {
     const tipsoValue = tipFormatter ? tipFormatter(value) : value;
     return (
       <div
+        id={id || 'light-ui-slider'}
         className={containerClass}
         onMouseOver={this.onMouseOver}
         onMouseMove={this.onMouseOver}
@@ -445,6 +452,7 @@ class Slider extends React.Component {
 }
 
 Slider.propTypes = {
+  id: PropTypes.string,
   className: PropTypes.string,
   tipFormatter: PropTypes.func,
   min: PropTypes.number,
@@ -472,6 +480,7 @@ Slider.propTypes = {
 };
 
 Slider.defaultProps = {
+  id: null,
   className: '',
   tipFormatter: null,
   min: 0,
