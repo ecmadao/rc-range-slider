@@ -1,6 +1,6 @@
 {
   "name": "rc-range-slider",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A range slider for react",
   "main": "./lib/index.js",
   "scripts": {
@@ -30,7 +30,7 @@
     "css-element-queries": "^1.0.2",
     "object-assign": "^4.1.1",
     "prop-types": "^15.6.0",
-    "rc-tipso": "1.0.0"
+    "rc-tipso": "^1.0.2"
   },
   "peerDependencies": {
     "react": "^16.2.0",
