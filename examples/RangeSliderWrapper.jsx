@@ -1,5 +1,6 @@
 import React from 'react';
 import Slider from '../components/index';
+import styles from './styles.css';
 
 class RangeSliderWrapper extends React.Component {
   render() {
@@ -59,6 +60,29 @@ class RangeSliderWrapper extends React.Component {
             value={[2, 6, 10, 15]}
             minRange={1}
             sectionRange={4}
+          />
+          <Slider
+            jump
+            id="6"
+            min={0}
+            max={20}
+            clickable
+            value={[2, 6, 10, 15]}
+            minRange={1}
+            tipsoPosition="bottom"
+            sectionRange={4}
+          />
+          <Slider
+            jump
+            id="6"
+            min={0}
+            max={20}
+            clickable
+            value={[2, 6, 10, 15]}
+            minRange={1}
+            tipsoPosition="bottom"
+            sectionRange={4}
+            tipsoClass={styles.tipsoClass2}
           />
         </div>
       </div>

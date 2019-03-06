@@ -82,14 +82,19 @@
 }
 
 .sliderTipso {
-  bottom: calc(100% + 8px);
   left: 20%;
   min-width: inherit !important;
   transition: all .2s;
 }
 
-.sectionTipso {
-  bottom: calc(100% + 10px);
+.sliderTipsoTop {
+  composes: sliderTipso;
+  bottom: calc(100% + 8px) !important;
+}
+
+.sliderTipsoBottom {
+  composes: sliderTipso;
+  top: calc(100% + 8px) !important;
 }
 
 .dragSection {

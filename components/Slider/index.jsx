@@ -10,6 +10,18 @@ import ProgressBar from './ProgressBar';
 import styles from './slider.css';
 import Utils from '../shared/utils';
 
+const getTipsoPosition = (position) => {
+  let pos = position
+  if (!new Set(['top', 'bottom']).has(position)) {
+    pos = 'top'
+  }
+
+  return {
+    position: pos,
+    style: pos === 'top' ? styles.sliderTipsoTop : styles.sliderTipsoBottom
+  }
+}
+
 class Slider extends React.Component {
   constructor(props) {
     super(props);
@@ -394,6 +406,7 @@ class Slider extends React.Component {
       tipFormatter,
     } = this.props;
     const { tipsoPosition } = this.state;
+    const posOption = getTipsoPosition(this.props.tipsoPosition)
 
     const containerClass = cx(
       styles.container,
@@ -413,6 +426,7 @@ class Slider extends React.Component {
           theme="dark"
           show={showTipso}
           disabled={!useTipso}
+          position={posOption.position}
           tipsoContent={(
             <div
               style={{
@@ -424,7 +438,7 @@ class Slider extends React.Component {
             </div>
           )}
           className={cx(
-            styles.sliderTipso,
+            posOption.style,
             tipsoClass
           )}
           tipsoStyle={{
@@ -465,6 +479,7 @@ Slider.propTypes = {
   color: PropTypes.string,
   draggerClass: PropTypes.string,
   tipsoClass: PropTypes.string,
+  tipsoPosition: PropTypes.string,
   pathwayClass: PropTypes.string,
   onChange: PropTypes.func,
   useTipso: PropTypes.bool,
@@ -493,6 +508,7 @@ Slider.defaultProps = {
   showTipso: false,
   draggerClass: '',
   tipsoClass: '',
+  tipsoPosition: 'top',
   pathwayClass: '',
   jump: false,
   jumpRange: 1,

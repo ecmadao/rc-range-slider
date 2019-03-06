@@ -8,3 +8,7 @@
 .tipsoClass {
   padding: 10px;
 }
+
+.tipsoClass2 {
+  opacity: 0.3 !important;
+}
